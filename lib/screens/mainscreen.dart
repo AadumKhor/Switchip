@@ -4,9 +4,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_document_picker/flutter_document_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 final Color iconColor = Color(0xff1f222b);
 final Color linkColor = Color(0xffac1eff);
+String searchQuery = '';
+DocumentReference doc = Firestore.instance.collection('stores').document();
+Stream<QuerySnapshot> stream =
+    Firestore.instance.collection('stores').snapshots();
 
 class MainScreen extends StatefulWidget {
   @override
@@ -16,6 +21,12 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   String path;
   bool isFileUploaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,8 +81,33 @@ class _MainScreenState extends State<MainScreen> {
                         fontSize: 15.0,
                         fontWeight: FontWeight.w300,
                       ),
-                    )
+                    ),
                   ],
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                Expanded(
+                  // height: 200.0,
+                  child: StreamBuilder(
+                    stream: stream,
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return CircularProgressIndicator();
+                      }
+                      return ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        itemCount: snapshot.data.documents.length,
+                        itemBuilder: (context, index) {
+                          DocumentSnapshot ds = snapshot.data.documents;
+                          String rand = ds["dbaName"];
+                          return Container(
+                            child: Text(rand),
+                          );
+                        },
+                      );
+                    },
+                  ),
                 )
               ],
             ),
@@ -80,7 +116,9 @@ class _MainScreenState extends State<MainScreen> {
       )),
       // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          checkCSV();
+        },
         backgroundColor: Color(0xff45d17a),
         tooltip: 'Add store',
         elevation: 5.0,
@@ -176,7 +214,10 @@ class _MainScreenState extends State<MainScreen> {
                       vertical: 10.0, horizontal: 5.0),
                   child: TextField(
                     keyboardType: TextInputType.text,
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      searchQuery = value;
+                      _doSearch(searchQuery);
+                    },
                     decoration: InputDecoration.collapsed(
                         hintText: 'Search Stores',
                         hintStyle: TextStyle(
@@ -193,6 +234,8 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
   }
+
+  Future _doSearch(String query) async {}
 
   void checkCSV() async {
     await _getPath();

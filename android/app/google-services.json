@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "624202774388",
+    "firebase_url": "https://switchip.firebaseio.com",
+    "project_id": "switchip",
+    "storage_bucket": "switchip.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:624202774388:android:8407330c7e11c744",
+        "android_client_info": {
+          "package_name": "com.example.switchip"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "624202774388-jneutp7or9tpvchqitvg3hnmd2274ra1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.switchip",
+            "certificate_hash": "5c2903e0616ac36088e782ec815f20bcfc4be6f1"
+          }
+        },
+        {
+          "client_id": "624202774388-sdesi4l5v9dcc4jb3pol70vialu70u0f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKcqEu5lG3CRrQDuw20FxPdhxCIKDlLCc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "624202774388-sdesi4l5v9dcc4jb3pol70vialu70u0f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
