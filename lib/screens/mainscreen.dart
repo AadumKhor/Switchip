@@ -9,7 +9,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 final Color iconColor = Color(0xff1f222b);
 final Color linkColor = Color(0xffac1eff);
 String searchQuery = '';
-DocumentReference doc = Firestore.instance.collection('stores').document();
+Future<QuerySnapshot> doc =
+    Firestore.instance.collection('stores').getDocuments();
 Stream<QuerySnapshot> stream =
     Firestore.instance.collection('stores').snapshots();
 
@@ -60,6 +61,7 @@ class _MainScreenState extends State<MainScreen> {
             padding:
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Row(
                   children: <Widget>[
@@ -87,28 +89,32 @@ class _MainScreenState extends State<MainScreen> {
                 SizedBox(
                   height: 20.0,
                 ),
-                Expanded(
-                  // height: 200.0,
-                  child: StreamBuilder(
-                    stream: stream,
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return CircularProgressIndicator();
-                      }
-                      return ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        itemCount: snapshot.data.documents.length,
-                        itemBuilder: (context, index) {
-                          DocumentSnapshot ds = snapshot.data.documents;
-                          String rand = ds["dbaName"];
-                          return Container(
-                            child: Text(rand),
-                          );
+                Flex(
+                    direction: Axis.vertical,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      StreamBuilder(
+                        stream: stream,
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return CircularProgressIndicator();
+                          } else {
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              itemCount: snapshot.data.documents.length,
+                              itemBuilder: (context, index) {
+                                List<DocumentSnapshot> ds = snapshot.data.documents;
+                                String rand = ds[index]["location"]["humanAddress"]["address"];
+                                return Container(
+                                  child: Text(rand),
+                                );
+                              },
+                            );
+                          }
                         },
-                      );
-                    },
-                  ),
-                )
+                      ),
+                    ])
               ],
             ),
           )
