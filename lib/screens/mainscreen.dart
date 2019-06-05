@@ -5,14 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_document_picker/flutter_document_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_database/firebase_database.dart';
 
 final Color iconColor = Color(0xff1f222b);
 final Color linkColor = Color(0xffac1eff);
 String searchQuery = '';
+var collection = Firestore.instance.collection('switchip');
 Future<QuerySnapshot> doc =
-    Firestore.instance.collection('stores').getDocuments();
+    Firestore.instance.collection('switchip').getDocuments();
 Stream<QuerySnapshot> stream =
-    Firestore.instance.collection('stores').snapshots();
+    Firestore.instance.collection('switchip').snapshots();
+
+// var dr = FirebaseDatabase.instance.reference();
 
 class MainScreen extends StatefulWidget {
   @override
@@ -77,7 +81,7 @@ class _MainScreenState extends State<MainScreen> {
                       flex: 2,
                     ),
                     Text(
-                      'View all',
+                      'View more',
                       style: TextStyle(
                         color: linkColor,
                         fontSize: 15.0,
@@ -94,18 +98,27 @@ class _MainScreenState extends State<MainScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       StreamBuilder(
-                        stream: stream,
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
+                        stream: collection.where('City' , isEqualTo:'ALBANY').snapshots(),
+                        builder: (context, snap) {
+                          // DataSnapshot ds = snap.data.snapshot;
+                          // List item = [];
+                          // List _list = [];
+                          // _list = ds.value;
+                          // _list.forEach((f) {
+                          //   if (f != null) {
+                          //     item.add(f);
+                          //   }
+                          // });
+                          if (!snap.hasData) {
                             return CircularProgressIndicator();
                           } else {
                             return ListView.builder(
                               shrinkWrap: true,
                               scrollDirection: Axis.vertical,
-                              itemCount: snapshot.data.documents.length,
+                              itemCount: 10,
                               itemBuilder: (context, index) {
-                                List<DocumentSnapshot> ds = snapshot.data.documents;
-                                String rand = ds[index]["location"]["humanAddress"]["address"];
+                                List<DocumentSnapshot> ds = snap.data.documents;
+                                String rand = ds[index]["City"];
                                 return Container(
                                   child: Text(rand),
                                 );
@@ -147,8 +160,8 @@ class _MainScreenState extends State<MainScreen> {
           Align(
             alignment: Alignment.centerLeft,
             child: Container(
-              height: 80.0,
-              width: 80.0,
+              height: 100.0,
+              width: 100.0,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: LinearGradient(
@@ -163,8 +176,8 @@ class _MainScreenState extends State<MainScreen> {
             right: -10,
             top: -10,
             child: Container(
-              width: 20.0,
-              height: 20.0,
+              width: 50.0,
+              height: 50.0,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: LinearGradient(
@@ -179,8 +192,8 @@ class _MainScreenState extends State<MainScreen> {
             right: 20,
             bottom: -10,
             child: Container(
-              width: 35.0,
-              height: 35.0,
+              width: 85.0,
+              height: 85.0,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: LinearGradient(
