@@ -57,8 +57,7 @@ class _MainScreenState extends State<MainScreen> {
               fontWeight: FontWeight.w600),
         ),
       ),
-      body: SingleChildScrollView(
-          child: Column(
+      body: ListView(
         children: <Widget>[
           _topPart(),
           Padding(
@@ -70,7 +69,7 @@ class _MainScreenState extends State<MainScreen> {
                 Row(
                   children: <Widget>[
                     Text(
-                      'Popular Stores',
+                      'Popular Stores : ',
                       style: TextStyle(
                           color: iconColor,
                           fontSize: 20.0,
@@ -93,59 +92,132 @@ class _MainScreenState extends State<MainScreen> {
                 SizedBox(
                   height: 20.0,
                 ),
-                Flex(
-                    direction: Axis.vertical,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      StreamBuilder(
-                        stream: collection.where('City' , isEqualTo:'ALBANY').snapshots(),
-                        builder: (context, snap) {
-                          // DataSnapshot ds = snap.data.snapshot;
-                          // List item = [];
-                          // List _list = [];
-                          // _list = ds.value;
-                          // _list.forEach((f) {
-                          //   if (f != null) {
-                          //     item.add(f);
-                          //   }
-                          // });
-                          if (!snap.hasData) {
-                            return CircularProgressIndicator();
-                          } else {
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.vertical,
-                              itemCount: 10,
-                              itemBuilder: (context, index) {
-                                List<DocumentSnapshot> ds = snap.data.documents;
-                                String rand = ds[index]["City"];
-                                return Container(
-                                  child: Text(rand),
-                                );
-                              },
-                            );
-                          }
-                        },
-                      ),
-                    ])
+                _buildList("ALBANY"),
+                SizedBox(
+                  height: 20.0,
+                ),
+                _buildList("WEEDSPORT"),
+                SizedBox(
+                  height: 20.0,
+                ),
+                _buildList("COHOES")
               ],
             ),
           )
         ],
-      )),
+      ),
       // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          checkCSV();
+          // Route map = new MaterialPageRoute();
         },
         backgroundColor: Color(0xff45d17a),
-        tooltip: 'Add store',
+        tooltip: 'Look on Map',
         elevation: 5.0,
         child: Icon(
-          Icons.add,
+          Icons.map,
           color: iconColor,
         ),
       ),
+    );
+  }
+
+  Widget _buildList(String place) {
+    return Column(
+      children: <Widget>[
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            place,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 22.0,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 1.5),
+          ),
+        ),
+        Container(
+          height: 250.0,
+          // width: 400.0,
+          child: StreamBuilder(
+            stream: collection.where('City', isEqualTo: place).snapshots(),
+            builder: (context, snap) {
+              if (!snap.hasData) {
+                return CircularProgressIndicator();
+              } else {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: snap.data.documents.length,
+                  itemBuilder: (context, index) {
+                    Color _getColorFromIndex() {
+                      switch (index % 5) {
+                        case (0):
+                          return Color(0xff00f773);
+                          break;
+                        case (1):
+                          return Color(0xff3afcd5);
+                          break;
+                        case (2):
+                          return Color(0xff6b2dfc);
+                          break;
+                        case (3):
+                          return Color(0xfff42eda);
+                          break;
+                        case (4):
+                          return Color(0xfff42e79);
+                          break;
+                        default:
+                          return Colors.black;
+                      }
+                    }
+
+                    List<DocumentSnapshot> ds = snap.data.documents;
+                    String city = ds[index]["City"];
+                    String county = ds[index]["County"];
+                    return Card(
+                      color: Colors.white,
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 10.0),
+                        width: 300.0,
+                        height: 230.0,
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              height: 175,
+                              width: 300.0,
+                              child: Center(
+                                child: Text(city + county),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            Container(
+                              height: 30,
+                              width: 300.0,
+                              color: _getColorFromIndex().withAlpha(100),
+                              child: Text(
+                                "County Name : $county",
+                                style: TextStyle(
+                                    color: iconColor,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }
+            },
+          ),
+        )
+      ],
     );
   }
 
@@ -238,7 +310,7 @@ class _MainScreenState extends State<MainScreen> {
                       _doSearch(searchQuery);
                     },
                     decoration: InputDecoration.collapsed(
-                        hintText: 'Search Stores',
+                        hintText: 'Search Stores in your city',
                         hintStyle: TextStyle(
                             color: iconColor,
                             fontSize: 20.0,
@@ -255,65 +327,4 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Future _doSearch(String query) async {}
-
-  void checkCSV() async {
-    await _getPath();
-    String _path = path;
-    final File file = new File(_path);
-    var res = await file.readAsString(encoding: utf8);
-    res = res.replaceAll('\r', '');
-    var js = json.encode(res);
-    print(js);
-    //     .transform(new LineSplitter()) // Convert stream to individual lines.
-    //     .listen((jsonList) {
-    //   // Process results.
-
-    //   List row = jsonList.split(','); // split by comma
-
-    //   String id = row[0];
-    //   String email = row[1];
-    //   String phone = row[2];
-
-    //   List<String> line = [id, email, phone];
-    //   data.add(line);
-
-    //   //   print('$id, $symbol,$age');
-    //   // }, onDone: () {
-    //   //   print('File is now closed.');
-    //   // }, onError: (e) {
-    //   //   print(e.toString());
-    // }).onDone(() {
-    //   var json = jsonEncode(data);
-    //   print(json);
-    //   print("File is now closed");
-    // });
-  }
-
-// function working fine
-  Future<String> _getPath() async {
-    String result;
-    try {
-      // setState(() {
-      //   isFileUploaded = false;
-      // });
-
-      FlutterDocumentPickerParams params =
-          FlutterDocumentPickerParams(allowedFileExtensions: ['pdf', 'csv']);
-
-      result = await FlutterDocumentPicker.openDocument(params: params);
-    } catch (e) {
-      print(e);
-      result = 'ERROR AA GYA BC: $e';
-    } finally {
-      setState(() {
-        isFileUploaded = true;
-      });
-    }
-
-    setState(() {
-      path = result;
-      print(path);
-    });
-    return path;
-  }
 }
