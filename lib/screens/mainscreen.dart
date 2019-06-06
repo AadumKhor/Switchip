@@ -1,12 +1,17 @@
 // import 'dart:convert';
 // import 'dart:io';
 
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ansicolor/ansicolor.dart';
 import 'package:switchip/screens/search_result_page.dart';
 import 'package:switchip/screens/search_result_page.dart' as prefix0;
+
+import 'map_page.dart';
 
 final Color iconColor = Color(0xff1f222b);
 final Color linkColor = Color(0xffac1eff);
@@ -95,63 +100,95 @@ class _MainScreenState extends State<MainScreen> {
                 SizedBox(
                   height: 20.0,
                 ),
-                _buildList("Albany"),
+                StoreList(place: "Albany"),
                 SizedBox(
                   height: 20.0,
                 ),
-                _buildList("Broome"),
+                StoreList(place: "Broome"),
                 SizedBox(
                   height: 20.0,
                 ),
-                _buildList("Cattaraugus"),
+                StoreList(place: "Cattaraugus"),
                 SizedBox(
                   height: 20.0,
                 ),
-                _buildList("Cayuga"),
+                StoreList(place: "Cayuga"),
                 SizedBox(
                   height: 20.0,
                 ),
-                _buildList("Chautauqua"),
+                StoreList(place: "Chautauqua"),
                 SizedBox(
                   height: 20.0,
                 ),
-                _buildList("Chemung"),
+                StoreList(place: "Chemung"),
                 SizedBox(
                   height: 20.0,
                 ),
-                _buildList("Chenango"),
+                StoreList(place: "Chenango"),
                 SizedBox(
                   height: 20.0,
                 ),
-                _buildList("Clinton"),
+                StoreList(place: "Clinton"),
                 SizedBox(
                   height: 20.0,
                 ),
-                _buildList("Columbia"),
+                StoreList(place: "Columbia"),
                 SizedBox(
                   height: 20.0,
                 ),
-                _buildList("Cortland"),
+                StoreList(place: "Cortland"),
                 SizedBox(
                   height: 20.0,
                 ),
-                _buildList("Delaware"),
+                StoreList(place: "Delaware"),
                 SizedBox(
                   height: 20.0,
                 ),
-                _buildList("Dutchess"),
+                StoreList(place: "Dutchess"),
                 SizedBox(
                   height: 20.0,
                 ),
-                _buildList("Erie"),
+                StoreList(place: "Erie"),
                 SizedBox(
                   height: 20.0,
                 ),
-                _buildList("Essex"),
+                StoreList(place: "Essex"),
                 SizedBox(
                   height: 20.0,
                 ),
-                _buildList("Franklin")
+                StoreList(place: "Franklin"),
+                SizedBox(
+                  height: 20.0,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) => MainScreen()));
+                  },
+                  child: Container(
+                    width: 300.0,
+                    height: 50.0,
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [Color(0xff11998e), Color(0xff38ef7d)],
+                            stops: [0.0, 2.0],
+                            tileMode: TileMode.clamp)),
+                    child: Center(
+                      child: Text(
+                        'Search more stores?',
+                        style: TextStyle(
+                            color: Colors.white,
+                            letterSpacing: 1.5,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           )
@@ -160,7 +197,8 @@ class _MainScreenState extends State<MainScreen> {
       // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Route map = new MaterialPageRoute();
+          Route map = new MaterialPageRoute(builder: (context) => MapPage());
+          Navigator.push(context, map);
         },
         backgroundColor: Color(0xff45d17a),
         tooltip: 'Look on Map',
@@ -170,108 +208,6 @@ class _MainScreenState extends State<MainScreen> {
           color: iconColor,
         ),
       ),
-    );
-  }
-
-  Widget _buildList(String place) {
-    return Column(
-      children: <Widget>[
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            place,
-            textAlign: TextAlign.left,
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 22.0,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 1.5),
-          ),
-        ),
-        Container(
-          height: 250.0,
-          // width: 400.0,
-          child: StreamBuilder(
-            stream: collection.where('County', isEqualTo: place).snapshots(),
-            builder: (context, snap) {
-              if (!snap.hasData) {
-                return Container(
-                    width: 80.0,
-                    height: 80.0,
-                    child: CircularProgressIndicator());
-              } else {
-                return ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: snap.data.documents.length,
-                  itemBuilder: (context, index) {
-                    Color _getColorFromIndex() {
-                      switch (index % 5) {
-                        case (0):
-                          return Color(0xff00f773);
-                          break;
-                        case (1):
-                          return Color(0xff3afcd5);
-                          break;
-                        case (2):
-                          return Color(0xff6b2dfc);
-                          break;
-                        case (3):
-                          return Color(0xfff42eda);
-                          break;
-                        case (4):
-                          return Color(0xfff42e79);
-                          break;
-                        default:
-                          return Colors.black;
-                      }
-                    }
-
-                    List<DocumentSnapshot> ds = snap.data.documents;
-                    String city = ds[index]["City"];
-                    String county = ds[index]["County"];
-                    return Card(
-                      color: Colors.white,
-                      child: Container(
-                        margin: EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 10.0),
-                        width: 300.0,
-                        height: 230.0,
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              height: 175,
-                              width: 300.0,
-                              child: Center(
-                                child: Text(city + county),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                            Container(
-                              height: 30,
-                              width: 300.0,
-                              color: _getColorFromIndex().withAlpha(100),
-                              child: Text(
-                                "City Name : $city",
-                                style: TextStyle(
-                                    color: iconColor,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                );
-              }
-            },
-          ),
-        )
-      ],
     );
   }
 
@@ -331,43 +267,35 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ),
           Center(
-            child: Container(
-              width: 300.0,
-              height: 60.0,
-              decoration: BoxDecoration(
+            child: Card(
+              elevation: 10.0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)),
+              child: Container(
+                width: 300.0,
+                height: 60.0,
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20.0),
                   shape: BoxShape.rectangle,
                   color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey[200],
-                        blurRadius: 10.0,
-                        offset: Offset(0.0, -10.0)),
-                    BoxShadow(
-                        color: Colors.grey[200],
-                        blurRadius: 20.0,
-                        offset: Offset(0.0, 10.0)),
-                    BoxShadow(
-                        color: Colors.grey[200],
-                        blurRadius: 15.0,
-                        offset: Offset(10.0, 10.0))
-                  ]),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
-                child: TextField(
-                  keyboardType: TextInputType.text,
-                  onSubmitted: (value) {
-                    searchQuery = value;
-                    _doSearch(searchQuery);
-                  },
-                  decoration: InputDecoration.collapsed(
-                      hintText: 'Search your county!',
-                      hintStyle: TextStyle(
-                          color: iconColor,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.w400,
-                          letterSpacing: 1.5)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 10.0, horizontal: 5.0),
+                  child: TextField(
+                    keyboardType: TextInputType.text,
+                    onSubmitted: (value) {
+                      searchQuery = value;
+                      _doSearch(searchQuery);
+                    },
+                    decoration: InputDecoration.collapsed(
+                        hintText: 'Search your county!',
+                        hintStyle: TextStyle(
+                            color: iconColor,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 1.5)),
+                  ),
                 ),
               ),
             ),
@@ -383,5 +311,182 @@ class _MainScreenState extends State<MainScreen> {
               query: query,
             ));
     await Navigator.push(context, searchRoute);
+  }
+}
+
+class StoreList extends StatelessWidget {
+  final String place;
+
+  StoreList({this.place});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            place,
+            textAlign: TextAlign.left,
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 22.0,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 1.5),
+          ),
+        ),
+        Container(
+          height: 250.0,
+          // width: 400.0,
+          child: StreamBuilder(
+            stream: collection.where('County', isEqualTo: place).snapshots(),
+            builder: (context, snap) {
+              if (snap.hasError) {
+                return Center(
+                  child: Text(
+                    'There was an error fetching the data.\n Restart the app.',
+                    style: TextStyle(
+                        color: iconColor,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.2),
+                  ),
+                );
+              }
+              if (!snap.hasData) {
+                return Container(
+                    width: 20.0,
+                    height: 20.0,
+                    child: CircularProgressIndicator());
+              } else {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: snap.data.documents.length,
+                  itemBuilder: (context, index) {
+                    Color _getColorFromIndex() {
+                      switch (index % 5) {
+                        case (0):
+                          return Color(0xff00f773);
+                          break;
+                        case (1):
+                          return Color(0xff3afcd5);
+                          break;
+                        case (2):
+                          return Color(0xff6b2dfc);
+                          break;
+                        case (3):
+                          return Color(0xfff42eda);
+                          break;
+                        case (4):
+                          return Color(0xfff42e79);
+                          break;
+                        default:
+                          return Colors.black;
+                      }
+                    }
+
+                    List<DocumentSnapshot> ds = snap.data.documents;
+                    String city = ds[index]["City"];
+                    String county = ds[index]["County"];
+                    String address = ds[index]["Location"];
+
+                    address = address.replaceAll('{', '');
+                    address = address.replaceAll('}', '');
+                    address = address.replaceAll('human_address', '');
+                    address = address.replaceAll('\'', '\"');
+                    address = address.replaceAll(':', '');
+                    address = address.replaceAll('\"address\"', '');
+                    address = address.replaceAll('\"', '');
+                    address = address.replaceAll('city', '');
+                    address = address.replaceAll('state', '');
+                    address = address.replaceAll('zip', '');
+                    address = address.replaceAll('needs_recoding False', '');
+                    return GestureDetector(
+                      onTap: () {
+                        showCupertinoDialog(context: context , builder: (context){
+                          return Scaffold(
+                            backgroundColor: Colors.white,
+                            body: Center(
+                              child: Container(
+                                width: double.infinity,
+                                height: 300.0,
+                                // color: Colors.white,
+                                margin: EdgeInsets.symmetric(vertical: 10.0 , horizontal: 10.0),
+                                child: Text(address),
+                              ),
+                            ),
+                          );
+                        });
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => AlertWithDetails(address: address,)));
+                      },
+                      child: Card(
+                        color: Colors.white,
+                        child: Container(
+                          margin: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 10.0),
+                          width: 300.0,
+                          height: 230.0,
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                height: 175,
+                                width: 300.0,
+                                child: Center(
+                                  child: Text(city + county),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10.0,
+                              ),
+                              Container(
+                                height: 30,
+                                width: 300.0,
+                                color: _getColorFromIndex().withAlpha(100),
+                                child: Text(
+                                  "City Name : $city",
+                                  style: TextStyle(
+                                      color: iconColor,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }
+            },
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class AlertWithDetails extends Dialog{
+  String address;
+
+  AlertWithDetails({this.address});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Center(
+        child: Container(
+          width: double.infinity,
+          color: Colors.white,
+          height: 300.0,
+          margin: EdgeInsets.symmetric(vertical: 10.0 , horizontal: 10.0),
+          child: Text(address),
+        ),
+      ),
+    );
   }
 }

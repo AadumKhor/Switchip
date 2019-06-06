@@ -32,6 +32,18 @@ class _SearchResultState extends State<SearchResult> {
       body: StreamBuilder(
         stream: collection.where('City', isEqualTo: widget.query).snapshots(),
         builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                'There was an error fetching the data.\n Restart the app.',
+                style: TextStyle(
+                    color: iconColor,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.2),
+              ),
+            );
+          }
           if (!snapshot.hasData) {
             return Center(
               child: Container(
