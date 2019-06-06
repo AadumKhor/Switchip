@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ansicolor/ansicolor.dart';
+import 'package:switchip/screens/map_page.dart' as prefix1;
 import 'package:switchip/screens/search_result_page.dart';
 import 'package:switchip/screens/search_result_page.dart' as prefix0;
 
@@ -157,7 +158,9 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 StoreList(place: "Dutchess"),
                 Divider(),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 StoreList(place: "Erie"),
                 Divider(),
                 SizedBox(
@@ -424,15 +427,55 @@ class StoreList extends StatelessWidget {
                             builder: (context) {
                               return Scaffold(
                                 backgroundColor: Colors.white,
-                                body: Center(
-                                  child: Container(
-                                    width: double.infinity,
-                                    height: 300.0,
-                                    // color: Colors.white,
-                                    margin: EdgeInsets.symmetric(
-                                        vertical: 10.0, horizontal: 10.0),
-                                    child: Text(address),
-                                  ),
+                                body: Column(
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 30.0, left: 20.0, right: 20.0),
+                                      child: Center(
+                                        child: Container(
+                                          width: double.infinity,
+                                          height: 300.0,
+                                          // color: Colors.white,
+                                          margin: EdgeInsets.symmetric(
+                                              vertical: 10.0, horizontal: 10.0),
+                                          child: Text(
+                                            "Address : $address",
+                                            style: TextStyle(
+                                                color: iconColor,
+                                                fontSize: 25.0,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 20.0,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    MapPage()));
+                                      },
+                                      child: Container(
+                                        color: Colors.black,
+                                        width: 200.0,
+                                        height: 50.0,
+                                        child: Center(
+                                          child: Text(
+                                            'View on Map',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 25.0),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
                               );
                             });
