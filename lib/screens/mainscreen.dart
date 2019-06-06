@@ -101,62 +101,75 @@ class _MainScreenState extends State<MainScreen> {
                   height: 20.0,
                 ),
                 StoreList(place: "Albany"),
+                Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
                 StoreList(place: "Broome"),
+                Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
                 StoreList(place: "Cattaraugus"),
+                Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
                 StoreList(place: "Cayuga"),
+                Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
                 StoreList(place: "Chautauqua"),
+                Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
                 StoreList(place: "Chemung"),
+                Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
                 StoreList(place: "Chenango"),
+                Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
                 StoreList(place: "Clinton"),
+                Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
                 StoreList(place: "Columbia"),
+                Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
                 StoreList(place: "Cortland"),
+                Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
                 StoreList(place: "Delaware"),
+                Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
                 StoreList(place: "Dutchess"),
-                SizedBox(
-                  height: 20.0,
-                ),
+                Divider(),
+                SizedBox(height: 20,),
                 StoreList(place: "Erie"),
+                Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
                 StoreList(place: "Essex"),
+                Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
                 StoreList(place: "Franklin"),
+                Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
@@ -330,7 +343,7 @@ class StoreList extends StatelessWidget {
             textAlign: TextAlign.left,
             style: TextStyle(
                 color: Colors.black,
-                fontSize: 22.0,
+                fontSize: 32.0,
                 fontWeight: FontWeight.w600,
                 letterSpacing: 1.5),
           ),
@@ -390,6 +403,8 @@ class StoreList extends StatelessWidget {
                     String city = ds[index]["City"];
                     String county = ds[index]["County"];
                     String address = ds[index]["Location"];
+                    String establishment = ds[index]["Establishment Type"];
+                    String eName = ds[index]["Entity Name"];
 
                     address = address.replaceAll('{', '');
                     address = address.replaceAll('}', '');
@@ -404,20 +419,23 @@ class StoreList extends StatelessWidget {
                     address = address.replaceAll('needs_recoding False', '');
                     return GestureDetector(
                       onTap: () {
-                        showCupertinoDialog(context: context , builder: (context){
-                          return Scaffold(
-                            backgroundColor: Colors.white,
-                            body: Center(
-                              child: Container(
-                                width: double.infinity,
-                                height: 300.0,
-                                // color: Colors.white,
-                                margin: EdgeInsets.symmetric(vertical: 10.0 , horizontal: 10.0),
-                                child: Text(address),
-                              ),
-                            ),
-                          );
-                        });
+                        showCupertinoDialog(
+                            context: context,
+                            builder: (context) {
+                              return Scaffold(
+                                backgroundColor: Colors.white,
+                                body: Center(
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 300.0,
+                                    // color: Colors.white,
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 10.0),
+                                    child: Text(address),
+                                  ),
+                                ),
+                              );
+                            });
                         // Navigator.push(
                         //     context,
                         //     MaterialPageRoute(
@@ -435,8 +453,43 @@ class StoreList extends StatelessWidget {
                               Container(
                                 height: 175,
                                 width: 300.0,
-                                child: Center(
-                                  child: Text(city + county),
+                                child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        eName,
+                                        style: TextStyle(
+                                            color: iconColor,
+                                            backgroundColor:
+                                                _getColorFromIndex()
+                                                    .withAlpha(150),
+                                            letterSpacing: 1.2,
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                      SizedBox(
+                                        height: 10.0,
+                                      ),
+                                      Container(
+                                        alignment: Alignment.centerLeft,
+                                        width: 50.0,
+                                        height: 50.0,
+                                        color: Colors.red,
+                                        child: Center(
+                                          child: Text(
+                                            establishment,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20.0,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                               SizedBox(
@@ -470,7 +523,7 @@ class StoreList extends StatelessWidget {
   }
 }
 
-class AlertWithDetails extends Dialog{
+class AlertWithDetails extends Dialog {
   String address;
 
   AlertWithDetails({this.address});
@@ -483,7 +536,7 @@ class AlertWithDetails extends Dialog{
           width: double.infinity,
           color: Colors.white,
           height: 300.0,
-          margin: EdgeInsets.symmetric(vertical: 10.0 , horizontal: 10.0),
+          margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
           child: Text(address),
         ),
       ),
