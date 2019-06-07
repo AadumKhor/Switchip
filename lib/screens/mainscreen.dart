@@ -106,72 +106,72 @@ class _MainScreenState extends State<MainScreen> {
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Broome"),
+                StoreList(place: "Broome" , shift: 2,),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Cattaraugus"),
+                StoreList(place: "Cattaraugus" , shift: 4,),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Cayuga"),
+                StoreList(place: "Cayuga" , shift: 2,),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Chautauqua"),
+                StoreList(place: "Chautauqua" , shift: 1,),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Chemung"),
+                StoreList(place: "Chemung" , shift: 3,),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Chenango"),
+                StoreList(place: "Chenango" , shift: 4,),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Clinton"),
+                StoreList(place: "Clinton" , shift: 1,),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Columbia"),
+                StoreList(place: "Columbia" , shift: 4,),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Cortland"),
+                StoreList(place: "Cortland" , shift: 3,),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Delaware"),
+                StoreList(place: "Delaware" , shift: 2,),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Dutchess"),
+                StoreList(place: "Dutchess" , shift: 4,),
                 Divider(),
                 SizedBox(
                   height: 20,
                 ),
-                StoreList(place: "Erie"),
+                StoreList(place: "Erie" , shift: 2,),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Essex"),
+                StoreList(place: "Essex" , shift: 0,),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Franklin"),
+                StoreList(place: "Franklin" , shift: 4,),
                 Divider(),
                 SizedBox(
                   height: 20.0,
@@ -332,8 +332,9 @@ class _MainScreenState extends State<MainScreen> {
 
 class StoreList extends StatelessWidget {
   final String place;
+  final int shift;
 
-  StoreList({this.place});
+  StoreList({this.place , this.shift});
 
   @override
   Widget build(BuildContext context) {
@@ -381,7 +382,7 @@ class StoreList extends StatelessWidget {
                   itemCount: snap.data.documents.length,
                   itemBuilder: (context, index) {
                     Color _getColorFromIndex() {
-                      switch (index % 5) {
+                      switch (index+shift % 5) {
                         case (0):
                           return Color(0xff00f773);
                           break;
@@ -404,10 +405,14 @@ class StoreList extends StatelessWidget {
 
                     List<DocumentSnapshot> ds = snap.data.documents;
                     String city = ds[index]["City"];
-                    String county = ds[index]["County"];
+                    String opType = ds[index]["Operation Type"];
                     String address = ds[index]["Location"];
                     String establishment = ds[index]["Establishment Type"];
                     String eName = ds[index]["Entity Name"];
+                    String dbaName = ds[index]["DBA Name"];
+                    var licence = ds[index]["Licence Number"];
+                    var area = ds[index]["Square Footage"];
+                    var zip = ds[index]["Zip Code"];
 
                     address = address.replaceAll('{', '');
                     address = address.replaceAll('}', '');
@@ -426,56 +431,121 @@ class StoreList extends StatelessWidget {
                             context: context,
                             builder: (context) {
                               return Scaffold(
-                                backgroundColor: Colors.white,
-                                body: Column(
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 30.0, left: 20.0, right: 20.0),
-                                      child: Center(
-                                        child: Container(
-                                          width: double.infinity,
-                                          height: 300.0,
-                                          // color: Colors.white,
-                                          margin: EdgeInsets.symmetric(
-                                              vertical: 10.0, horizontal: 10.0),
-                                          child: Text(
-                                            "Address : $address",
-                                            style: TextStyle(
-                                                color: iconColor,
-                                                fontSize: 25.0,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 20.0,
-                                    ),
-                                    GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    MapPage()));
-                                      },
-                                      child: Container(
-                                        color: Colors.black,
-                                        width: 200.0,
-                                        height: 50.0,
+                                backgroundColor: Colors.transparent,
+                                body: Center(
+                                  child: Column(
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 30.0,
+                                            left: 20.0,
+                                            right: 20.0),
                                         child: Center(
-                                          child: Text(
-                                            'View on Map',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 25.0),
+                                          child: Container(
+                                            width: double.infinity,
+                                            height: 300.0,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(20.0),
+                                              gradient: LinearGradient(
+                                                begin: Alignment.topLeft,
+                                                end: Alignment.bottomRight,
+                                                colors: [Color(0xffc0e7f7) , Color(0xffc9ffe7)],
+                                                tileMode: TileMode.clamp,
+                                                stops:[0.0 , 0.5]
+                                              )
+                                            ),
+                                            margin: EdgeInsets.symmetric(
+                                                vertical: 10.0,
+                                                horizontal: 10.0),
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(vertical: 10.0 , horizontal: 10.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Text(
+                                                    "DBA Name : $dbaName",
+                                                    style: TextStyle(
+                                                        color: iconColor,
+                                                        fontSize: 20.0,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 10.0,
+                                                  ),
+                                                  Text(
+                                                    "Address : $address",
+                                                    style: TextStyle(
+                                                        color: iconColor,
+                                                        fontSize: 20.0,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 10.0,
+                                                  ),
+                                                  Text(
+                                                    "Area : $area",
+                                                    textAlign: TextAlign.left,
+                                                    style: TextStyle(
+                                                        color: iconColor,
+                                                        fontSize: 20.0,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                  Text(
+                                                    "Licence: $licence",
+                                                    textAlign: TextAlign.left,
+                                                    style: TextStyle(
+                                                        color: iconColor,
+                                                        fontSize: 20.0,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                  Text(
+                                                    "Zip Code: $zip",
+                                                    textAlign: TextAlign.left,
+                                                    style: TextStyle(
+                                                        color: iconColor,
+                                                        fontSize: 20.0,
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    )
-                                  ],
+                                      SizedBox(
+                                        height: 20.0,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MapPage()));
+                                        },
+                                        child: Container(
+                                          color: Colors.black,
+                                          width: 200.0,
+                                          height: 50.0,
+                                          child: Center(
+                                            child: Text(
+                                              'View on Map',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 25.0),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               );
                             });
@@ -516,20 +586,59 @@ class StoreList extends StatelessWidget {
                                       SizedBox(
                                         height: 10.0,
                                       ),
-                                      Container(
-                                        alignment: Alignment.centerLeft,
-                                        width: 50.0,
-                                        height: 50.0,
-                                        color: Colors.red,
-                                        child: Center(
-                                          child: Text(
-                                            establishment,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 20.0,
-                                                fontWeight: FontWeight.bold),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Container(
+                                            alignment: Alignment.centerLeft,
+                                            width: 50.0,
+                                            height: 50.0,
+                                            color: Colors.red,
+                                            child: Center(
+                                              child: Text(
+                                                establishment,
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 20.0,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
                                           ),
-                                        ),
+                                          Container(
+                                            alignment: Alignment.centerLeft,
+                                            width: 100.0,
+                                            height: 50.0,
+                                            color: Colors.green,
+                                            child: Center(
+                                              child: Text(
+                                                opType,
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 20.0,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            alignment: Alignment.centerLeft,
+                                            width: 100.0,
+                                            height: 50.0,
+                                            color: Colors.deepPurple,
+                                            child: Center(
+                                              child: Text(
+                                                "$area",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 20.0,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
