@@ -35,7 +35,7 @@ packages:
       name: cloud_firestore
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.1"
+    version: "0.12.3"
   collection:
     dependency: transitive
     description:
@@ -69,25 +69,11 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_document_picker:
-    dependency: "direct main"
-    description:
-      name: flutter_document_picker
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
     source: sdk
     version: "0.0.0"
-  google_maps_flutter:
-    dependency: "direct main"
-    description:
-      name: google_maps_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.5.15"
   matcher:
     dependency: transitive
     description:

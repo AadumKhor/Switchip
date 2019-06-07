@@ -88,6 +88,9 @@ class _MorePageState extends State<MorePage> {
             searchQuery == ''
                 ? SizedBox(
                     height: 200,
+                    width: 200.0,
+                    child: Text(
+                        'Select number of items from dropdown.\n Press done to execute query'),
                   )
                 : Container(
                     height: MediaQuery.of(context).size.height - 100,
@@ -98,53 +101,62 @@ class _MorePageState extends State<MorePage> {
                             .snapshots(),
                         builder: (context, snapshot) {
                           List<DocumentSnapshot> ds = snapshot.data.documents;
-                          if (snapshot.hasError) {
+
+                          try {
+                            if (snapshot.hasError) {
+                              return Center(
+                                child: Text(
+                                    'Error occured\n Please restart the app'),
+                              );
+                            }
+                            if (!snapshot.hasData || snapshot.data == null) {
+                              return Container(
+                                width: 80.0,
+                                height: 80.0,
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            return ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              itemCount: count,
+                              itemBuilder: (context, index) {
+                                String name = ds[index]["Entity Name"];
+                                String address = ds[index]["Location"];
+                                address = address.replaceAll('{', '');
+                                address = address.replaceAll('}', '');
+                                address =
+                                    address.replaceAll('human_address', '');
+                                address = address.replaceAll('\'', '\"');
+                                address = address.replaceAll(':', '');
+                                address = address.replaceAll('\"address\"', '');
+                                address = address.replaceAll('\"', '');
+                                address = address.replaceAll('city', '');
+                                address = address.replaceAll('state', '');
+                                address = address.replaceAll('zip', '');
+                                address = address.replaceAll(
+                                    'needs_recoding False', '');
+                                return ListTile(
+                                  title: Text(
+                                    name,
+                                    style: TextStyle(
+                                        color: iconColor,
+                                        fontSize: 25.0,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                  subtitle: Text(address,
+                                      style: TextStyle(
+                                          color: Colors.grey[600],
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.w400)),
+                                );
+                              },
+                            );
+                          } catch (e) {
                             return Center(
                               child: Text(
-                                  'Error occured\n Please restart the app'),
+                                  'Please enter valid county.\n Check your spelling or capitalisation'),
                             );
                           }
-                          if (!snapshot.hasData || snapshot.data == null) {
-                            return Container(
-                              width: 80.0,
-                              height: 80.0,
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          return ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            itemCount: count,
-                            itemBuilder: (context, index) {
-                              String name = ds[index]["Entity Name"];
-                              String address = ds[index]["Location"];
-                              address = address.replaceAll('{', '');
-                              address = address.replaceAll('}', '');
-                              address = address.replaceAll('human_address', '');
-                              address = address.replaceAll('\'', '\"');
-                              address = address.replaceAll(':', '');
-                              address = address.replaceAll('\"address\"', '');
-                              address = address.replaceAll('\"', '');
-                              address = address.replaceAll('city', '');
-                              address = address.replaceAll('state', '');
-                              address = address.replaceAll('zip', '');
-                              address = address.replaceAll(
-                                  'needs_recoding False', '');
-                              return ListTile(
-                                title: Text(
-                                  name,
-                                  style: TextStyle(
-                                      color: iconColor,
-                                      fontSize: 25.0,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                                subtitle: Text(address,
-                                    style: TextStyle(
-                                        color: Colors.grey[600],
-                                        fontSize: 15.0,
-                                        fontWeight: FontWeight.w400)),
-                              );
-                            },
-                          );
                         }),
                   )
           ],

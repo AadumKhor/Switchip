@@ -17,6 +17,6 @@ class MyApp extends StatelessWidget {
         title: 'Material App',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(fontFamily: 'Poppins', primaryColor: mainColor),
-        home: MorePage());
+        home: MainScreen());
   }
 }
