@@ -1,6 +1,3 @@
-// import 'dart:convert';
-// import 'dart:io';
-
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -8,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ansicolor/ansicolor.dart';
-import 'package:switchip/screens/map_page.dart' as prefix1;
 import 'package:switchip/screens/search_result_page.dart';
 import 'package:switchip/screens/search_result_page.dart' as prefix0;
 
 import 'map_page.dart';
+import 'more_page.dart';
 
 final Color iconColor = Color(0xff1f222b);
 final Color linkColor = Color(0xffac1eff);
@@ -88,12 +85,20 @@ class _MainScreenState extends State<MainScreen> {
                     Spacer(
                       flex: 2,
                     ),
-                    Text(
-                      'View more',
-                      style: TextStyle(
-                        color: linkColor,
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w300,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MorePage()));
+                      },
+                      child: Text(
+                        'View more',
+                        style: TextStyle(
+                          color: linkColor,
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.w300,
+                        ),
                       ),
                     ),
                   ],
@@ -106,72 +111,114 @@ class _MainScreenState extends State<MainScreen> {
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Broome" , shift: 2,),
+                StoreList(
+                  place: "Broome",
+                  shift: 2,
+                ),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Cattaraugus" , shift: 4,),
+                StoreList(
+                  place: "Cattaraugus",
+                  shift: 4,
+                ),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Cayuga" , shift: 2,),
+                StoreList(
+                  place: "Cayuga",
+                  shift: 2,
+                ),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Chautauqua" , shift: 1,),
+                StoreList(
+                  place: "Chautauqua",
+                  shift: 1,
+                ),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Chemung" , shift: 3,),
+                StoreList(
+                  place: "Chemung",
+                  shift: 3,
+                ),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Chenango" , shift: 4,),
+                StoreList(
+                  place: "Chenango",
+                  shift: 4,
+                ),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Clinton" , shift: 1,),
+                StoreList(
+                  place: "Clinton",
+                  shift: 1,
+                ),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Columbia" , shift: 4,),
+                StoreList(
+                  place: "Columbia",
+                  shift: 4,
+                ),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Cortland" , shift: 3,),
+                StoreList(
+                  place: "Cortland",
+                  shift: 3,
+                ),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Delaware" , shift: 2,),
+                StoreList(
+                  place: "Delaware",
+                  shift: 2,
+                ),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Dutchess" , shift: 4,),
+                StoreList(
+                  place: "Dutchess",
+                  shift: 4,
+                ),
                 Divider(),
                 SizedBox(
                   height: 20,
                 ),
-                StoreList(place: "Erie" , shift: 2,),
+                StoreList(
+                  place: "Erie",
+                  shift: 2,
+                ),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Essex" , shift: 0,),
+                StoreList(
+                  place: "Essex",
+                  shift: 0,
+                ),
                 Divider(),
                 SizedBox(
                   height: 20.0,
                 ),
-                StoreList(place: "Franklin" , shift: 4,),
+                StoreList(
+                  place: "Franklin",
+                  shift: 4,
+                ),
                 Divider(),
                 SizedBox(
                   height: 20.0,
@@ -287,31 +334,29 @@ class _MainScreenState extends State<MainScreen> {
               elevation: 10.0,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0)),
-              child: Container(
-                width: 300.0,
-                height: 60.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.0),
-                  shape: BoxShape.rectangle,
-                  color: Colors.white,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 10.0, horizontal: 5.0),
-                  child: TextField(
-                    keyboardType: TextInputType.text,
-                    onSubmitted: (value) {
-                      searchQuery = value;
-                      _doSearch(searchQuery);
-                    },
-                    decoration: InputDecoration.collapsed(
-                        hintText: 'Search your county!',
-                        hintStyle: TextStyle(
-                            color: iconColor,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w400,
-                            letterSpacing: 1.5)),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MorePage()));
+                },
+                child: Container(
+                  width: 300.0,
+                  height: 60.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.0),
+                    shape: BoxShape.rectangle,
+                    color: Colors.white,
                   ),
+                  child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 5.0),
+                      child: Text(
+                        'Search your county!',
+                        style: TextStyle(
+                            color: iconColor,
+                            fontSize: 22.0,
+                            fontWeight: FontWeight.w500),
+                      )),
                 ),
               ),
             ),
@@ -332,9 +377,9 @@ class _MainScreenState extends State<MainScreen> {
 
 class StoreList extends StatelessWidget {
   final String place;
-  final int shift;
+  int shift;
 
-  StoreList({this.place , this.shift});
+  StoreList({this.place, this.shift = 0});
 
   @override
   Widget build(BuildContext context) {
@@ -382,7 +427,7 @@ class StoreList extends StatelessWidget {
                   itemCount: snap.data.documents.length,
                   itemBuilder: (context, index) {
                     Color _getColorFromIndex() {
-                      switch (index+shift % 5) {
+                      switch ((index + shift) % 5) {
                         case (0):
                           return Color(0xff00f773);
                           break;
@@ -437,28 +482,31 @@ class StoreList extends StatelessWidget {
                                     children: <Widget>[
                                       Padding(
                                         padding: const EdgeInsets.only(
-                                            top: 30.0,
-                                            left: 20.0,
-                                            right: 20.0),
+                                            top: 30.0, left: 20.0, right: 20.0),
                                         child: Center(
                                           child: Container(
                                             width: double.infinity,
                                             height: 300.0,
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(20.0),
-                                              gradient: LinearGradient(
-                                                begin: Alignment.topLeft,
-                                                end: Alignment.bottomRight,
-                                                colors: [Color(0xffc0e7f7) , Color(0xffc9ffe7)],
-                                                tileMode: TileMode.clamp,
-                                                stops:[0.0 , 0.5]
-                                              )
-                                            ),
+                                                borderRadius:
+                                                    BorderRadius.circular(20.0),
+                                                gradient: LinearGradient(
+                                                    begin: Alignment.topLeft,
+                                                    end: Alignment.bottomRight,
+                                                    colors: [
+                                                      Color(0xffc0e7f7),
+                                                      Color(0xffc9ffe7)
+                                                    ],
+                                                    tileMode: TileMode.clamp,
+                                                    stops: [0.0, 0.5])),
                                             margin: EdgeInsets.symmetric(
                                                 vertical: 10.0,
                                                 horizontal: 10.0),
                                             child: Padding(
-                                              padding: const EdgeInsets.symmetric(vertical: 10.0 , horizontal: 10.0),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 10.0,
+                                                      horizontal: 10.0),
                                               child: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,

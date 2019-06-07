@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:switchip/screens/mainscreen.dart';
+import 'package:switchip/screens/more_page.dart';
 
 void main() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -16,6 +17,6 @@ class MyApp extends StatelessWidget {
         title: 'Material App',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(fontFamily: 'Poppins', primaryColor: mainColor),
-        home: MainScreen());
+        home: MorePage());
   }
 }
