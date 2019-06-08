@@ -101,7 +101,6 @@ class _MorePageState extends State<MorePage> {
                             .snapshots(),
                         builder: (context, snapshot) {
                           List<DocumentSnapshot> ds = snapshot.data.documents;
-
                           try {
                             if (snapshot.hasError) {
                               return Center(
